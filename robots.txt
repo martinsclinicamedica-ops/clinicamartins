@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://clinicamartins.med.br/sitemap.xml
