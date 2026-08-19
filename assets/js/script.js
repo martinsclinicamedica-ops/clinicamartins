@@ -17,6 +17,18 @@ const observer = new IntersectionObserver(entries => {
 }, { threshold: 0.12 });
 document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
 
+// Depoimento recebido diretamente pela Clínica Martins.
+// Mantemos apenas o primeiro nome no site e não atribuímos nota do Google,
+// pois a mensagem original não contém classificação por estrelas.
+const reviewsTrack = document.querySelector(".reviews-track");
+if (reviewsTrack && !reviewsTrack.querySelector('[data-review="magali"]')) {
+  const magaliReview = document.createElement("blockquote");
+  magaliReview.className = "review-card";
+  magaliReview.dataset.review = "magali";
+  magaliReview.innerHTML = `<p>“Parabéns, seu atendimento é com excelência, respeito e gratidão pelo carinho.”</p><footer><span>M</span><div><strong>Magali</strong><small>Paciente da Clínica Martins</small></div></footer>`;
+  reviewsTrack.appendChild(magaliReview);
+}
+
 const track = document.querySelector(".reviews-track");
 const cards = [...document.querySelectorAll(".review-card")];
 const dotsWrap = document.querySelector(".review-dots");
