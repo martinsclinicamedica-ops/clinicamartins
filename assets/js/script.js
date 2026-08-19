@@ -17,16 +17,45 @@ const observer = new IntersectionObserver(entries => {
 }, { threshold: 0.12 });
 document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
 
-// Depoimento recebido diretamente pela Clínica Martins.
-// Mantemos apenas o primeiro nome no site e usamos cinco estrelas no mesmo padrão visual
-// adotado para os depoimentos recebidos diretamente pela clínica.
+// Depoimentos recebidos diretamente pela Clínica Martins.
+// Mantemos apenas o primeiro nome no site e usamos cinco estrelas no mesmo padrão visual.
 const reviewsTrack = document.querySelector(".reviews-track");
-if (reviewsTrack && !reviewsTrack.querySelector('[data-review="magali"]')) {
-  const magaliReview = document.createElement("blockquote");
-  magaliReview.className = "review-card";
-  magaliReview.dataset.review = "magali";
-  magaliReview.innerHTML = `<div class="stars">★★★★★</div><p>“Parabéns, seu atendimento é com excelência, respeito e gratidão pelo carinho.”</p><footer><span>M</span><div><strong>Magali</strong><small>Paciente da Clínica Martins</small></div></footer>`;
-  reviewsTrack.appendChild(magaliReview);
+if (reviewsTrack) {
+  const directReviews = [
+    {
+      id: "magali",
+      initial: "M",
+      name: "Magali",
+      text: "Parabéns, seu atendimento é com excelência, respeito e gratidão pelo carinho."
+    },
+    {
+      id: "jose",
+      initial: "J",
+      name: "José",
+      text: "Gostei muito da atenção que ele nos deu. Muito atencioso, e acredito que vai dar tudo muito certo, pois ele é muito bom. Obrigado."
+    },
+    {
+      id: "paula",
+      initial: "P",
+      name: "Paula",
+      text: "Amei o atendimento. Desde o início até a consulta, todos muito atenciosos. Parabéns."
+    },
+    {
+      id: "gisele",
+      initial: "G",
+      name: "Gisele",
+      text: "Ótimo atendimento. Com certeza voltarei novamente."
+    }
+  ];
+
+  directReviews.forEach(review => {
+    if (reviewsTrack.querySelector(`[data-review="${review.id}"]`)) return;
+    const card = document.createElement("blockquote");
+    card.className = "review-card";
+    card.dataset.review = review.id;
+    card.innerHTML = `<div class="stars">★★★★★</div><p>“${review.text}”</p><footer><span>${review.initial}</span><div><strong>${review.name}</strong><small>Paciente da Clínica Martins</small></div></footer>`;
+    reviewsTrack.appendChild(card);
+  });
 }
 
 const track = document.querySelector(".reviews-track");
