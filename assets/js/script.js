@@ -56,6 +56,15 @@ if (reviewsTrack) {
     card.innerHTML = `<div class="stars">★★★★★</div><p>“${review.text}”</p><footer><span>${review.initial}</span><div><strong>${review.name}</strong><small>Paciente da Clínica Martins</small></div></footer>`;
     reviewsTrack.appendChild(card);
   });
+
+  // A Renita também publicou a avaliação no Google; usamos aqui a versão completa.
+  const renitaCard = [...reviewsTrack.querySelectorAll(".review-card")].find(card => card.querySelector("footer strong")?.textContent.trim() === "Renita");
+  if (renitaCard) {
+    const text = renitaCard.querySelector("p");
+    const source = renitaCard.querySelector("footer small");
+    if (text) text.textContent = "“Fui muito bem atendida pela recepcionista e pelo doutor Bruno. Médico demonstrou interesse em resolver meu problema, explicou bem o que se passava comigo. Passa muita confiança. Ambiente agradável. Clínica bem localizada e de fácil acesso. Se preciso retornarei lá.”";
+    if (source) source.textContent = "Avaliação no Google";
+  }
 }
 
 const track = document.querySelector(".reviews-track");
