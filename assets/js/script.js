@@ -45,6 +45,13 @@ if (reviewsTrack) {
       initial: "G",
       name: "Gisele",
       text: "Ótimo atendimento. Com certeza voltarei novamente."
+    },
+    {
+      id: "avaliacao-interna-anonima-1",
+      initial: "P",
+      name: "Paciente",
+      source: "Avaliação interna",
+      text: "Atendimento no horário agendado, doutor muito bacana. Consultório novo e limpo. Excelente."
     }
   ];
 
@@ -53,7 +60,8 @@ if (reviewsTrack) {
     const card = document.createElement("blockquote");
     card.className = "review-card";
     card.dataset.review = review.id;
-    card.innerHTML = `<div class="stars">★★★★★</div><p>“${review.text}”</p><footer><span>${review.initial}</span><div><strong>${review.name}</strong><small>Paciente da Clínica Martins</small></div></footer>`;
+    const source = review.source || "Paciente da Clínica Martins";
+    card.innerHTML = `<div class="stars">★★★★★</div><p>“${review.text}”</p><footer><span>${review.initial}</span><div><strong>${review.name}</strong><small>${source}</small></div></footer>`;
     reviewsTrack.appendChild(card);
   });
 
