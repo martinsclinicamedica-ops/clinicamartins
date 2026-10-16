@@ -69,7 +69,7 @@
     <div class="pill">🎓 AVANÇADO</div>
   </header>
   <section class="stats" aria-label="Pontuação">
-    <div class="stat"><b id="score">0 / 5</b><small>🍎 Acertos</small></div>
+    <div class="stat"><b id="score">0 / 15</b><small>🍎 Acertos</small></div>
     <div class="stat"><b id="length">3</b><small>🐍 Tamanho</small></div>
     <div class="stat"><b id="status" style="font-size:15px;margin-top:4px">Pronto</b><small>Estado</small></div>
   </section>
@@ -79,7 +79,7 @@
       <div class="ovContent">
         <div class="ovIcon" id="ovIcon">🐍🍎</div>
         <div class="ovTitle" id="ovTitle">Cobrinha Digestiva</div>
-        <p class="ovText" id="ovText">Pegue as maçãs, responda corretamente e faça a cobrinha crescer. Cinco acertos para vencer!</p>
+        <p class="ovText" id="ovText">Pegue as maçãs, responda corretamente e faça a cobrinha crescer. Acerte as 15 perguntas para vencer!</p>
         <button class="primary" id="ovButton" type="button">▶ Jogar</button>
       </div>
     </div>
@@ -119,14 +119,43 @@ var Q=[
  {topic:'Regulação hormonal',q:'Após uma refeição rica em lipídios, qual hormônio estimula a contração da vesícula biliar e a secreção de enzimas pancreáticas?',o:['Gastrina.','Secretina.','Colecistocinina (CCK).','Somatostatina.'],a:2,e:'A colecistocinina é secretada pelas células I do duodeno e jejuno em resposta principalmente a ácidos graxos e produtos da digestão proteica. Ela contrai a vesícula biliar, favorece o relaxamento do esfíncter de Oddi, aumenta a secreção de enzimas pancreáticas e retarda o esvaziamento gástrico. A secretina, diferentemente, estimula principalmente a secreção pancreática de bicarbonato.'},
  {topic:'Absorção intestinal',q:'Um paciente submetido à ressecção extensa do íleo terminal desenvolve esteatorreia. Qual mecanismo explica principalmente essa alteração?',o:['Redução da absorção de ferro no cólon.','Prejuízo da reabsorção dos sais biliares e da circulação entero-hepática.','Diminuição da produção de ácido clorídrico no estômago.','Bloqueio da liberação de amilase pelas glândulas salivares.'],a:1,e:'O íleo terminal reabsorve ativamente grande parte dos sais biliares, sobretudo por meio do transportador ASBT. Uma ressecção extensa diminui o reservatório desses sais e prejudica a formação de micelas necessárias à absorção de lipídios. Isso pode causar esteatorreia e deficiência das vitaminas A, D, E e K. A mesma região também absorve a vitamina B12 ligada ao fator intrínseco.'},
  {topic:'Anatomia hepatopancreática',q:'Em sua configuração anatômica habitual, a ampola hepatopancreática (de Vater) resulta da união de quais estruturas e desemboca onde?',o:['Ducto cístico e ducto hepático direito, no jejuno.','Ducto pancreático acessório e ducto cístico, na papila duodenal menor.','Ducto hepático comum e ducto pancreático acessório, no bulbo duodenal.','Ducto colédoco e ducto pancreático principal, na papila duodenal maior.'],a:3,e:'O ducto colédoco conduz a bile e normalmente se une ao ducto pancreático principal (de Wirsung), formando a ampola hepatopancreática. Ela desemboca na papila duodenal maior, na segunda porção do duodeno. O esfíncter de Oddi regula a passagem dessas secreções. Um cálculo impactado nessa região pode causar obstrução biliar e pancreatite aguda.'},
- {topic:'Secreção gástrica',q:'Durante a secreção de ácido clorídrico pelas células parietais gástricas, qual processo provoca a chamada maré alcalina pós-prandial?',o:['Transporte de bicarbonato para o sangue pela membrana basolateral da célula parietal.','Liberação de bicarbonato diretamente no lúmen gástrico.','Inibição da anidrase carbônica nas células parietais.','Absorção direta de íons H⁺ do estômago para a circulação.'],a:0,e:'A anidrase carbônica catalisa a formação de ácido carbônico a partir de CO₂ e água, produzindo H⁺ e HCO₃⁻. O H⁺ é transportado para o lúmen gástrico pela bomba H⁺/K⁺-ATPase da membrana apical. Simultaneamente, o bicarbonato passa ao sangue através do trocador basolateral Cl⁻/HCO₃⁻, elevando temporariamente o bicarbonato circulante: a maré alcalina pós-prandial.'}
+ {topic:'Secreção gástrica',q:'Durante a secreção de ácido clorídrico pelas células parietais gástricas, qual processo provoca a chamada maré alcalina pós-prandial?',o:['Transporte de bicarbonato para o sangue pela membrana basolateral da célula parietal.','Liberação de bicarbonato diretamente no lúmen gástrico.','Inibição da anidrase carbônica nas células parietais.','Absorção direta de íons H⁺ do estômago para a circulação.'],a:0,e:'A anidrase carbônica catalisa a formação de ácido carbônico a partir de CO₂ e água, produzindo H⁺ e HCO₃⁻. O H⁺ é transportado para o lúmen gástrico pela bomba H⁺/K⁺-ATPase da membrana apical. Simultaneamente, o bicarbonato passa ao sangue através do trocador basolateral Cl⁻/HCO₃⁻, elevando temporariamente o bicarbonato circulante: a maré alcalina pós-prandial.'},
+{"topic":"Caminho do alimento","q":"Qual é o trajeto correto do alimento desde a boca até o ânus?","o":["Boca → esôfago → faringe → estômago → intestino grosso → intestino delgado → ânus.","Boca → faringe → esôfago → estômago → duodeno → jejuno → íleo → ceco → cólon → reto → canal anal → ânus.","Boca → laringe → traqueia → estômago → intestino delgado → reto → ânus.","Boca → faringe → estômago → esôfago → duodeno → cólon → ânus."],"a":1,"e":"O alimento passa pela boca, faringe, esôfago e estômago. Depois segue pelo intestino delgado (duodeno, jejuno e íleo), alcança o ceco e percorre o cólon ascendente, transverso, descendente e sigmoide. Os resíduos chegam ao reto, passam pelo canal anal e saem pelo ânus. A partir do intestino grosso, o material é progressivamente transformado em fezes."},
+{"topic":"Deglutição","q":"Durante a deglutição, qual estrutura ajuda a impedir a entrada do alimento nas vias respiratórias?","o":["Epiglote.","Vesícula biliar.","Piloro.","Ceco."],"a":0,"e":"Na deglutição, a laringe se eleva, as pregas vocais se fecham e a epiglote se desloca sobre a entrada da laringe, ajudando a proteger as vias respiratórias. Assim, o bolo alimentar é direcionado para o esôfago, e não para a traqueia."},
+{"topic":"Digestão na boca","q":"Qual enzima da saliva inicia a digestão do amido?","o":["Pepsina.","Lipase pancreática.","Amilase salivar (ptialina).","Tripsina."],"a":2,"e":"A amilase salivar, também chamada ptialina, começa a quebrar as ligações do amido ainda na boca, produzindo moléculas menores. A mastigação aumenta a superfície do alimento e facilita o contato com a saliva."},
+{"topic":"Movimento do esôfago","q":"Como o esôfago transporta o bolo alimentar em direção ao estômago?","o":["Por gravidade exclusivamente.","Por movimentos peristálticos.","Por absorção dos nutrientes.","Pela secreção de bile."],"a":1,"e":"O esôfago utiliza ondas coordenadas de contração e relaxamento muscular chamadas peristaltismo. Elas impulsionam o bolo alimentar até o estômago mesmo quando a pessoa está deitada. O esfíncter esofágico inferior relaxa durante a deglutição para permitir a passagem."},
+{"topic":"Função do estômago","q":"Qual é uma função importante do ácido clorídrico secretado no estômago?","o":["Absorver toda a água da refeição.","Produzir bile.","Neutralizar a acidez do duodeno.","Manter o pH ácido, desnaturar proteínas e favorecer a ativação do pepsinogênio."],"a":3,"e":"O ácido clorídrico é secretado pelas células parietais do estômago. Ele reduz o pH gástrico, favorece a desnaturação das proteínas e a conversão de pepsinogênio em pepsina, além de contribuir para a defesa contra microrganismos ingeridos."},
+{"topic":"Produção da bile","q":"Qual órgão é responsável pela produção da bile?","o":["Pâncreas.","Fígado.","Estômago.","Baço."],"a":1,"e":"A bile é produzida continuamente pelos hepatócitos, células do fígado. Seus sais biliares ajudam a emulsificar gorduras e a formar micelas, facilitando a digestão e a absorção dos lipídios no intestino delgado."},
+{"topic":"Armazenamento da bile","q":"Onde a bile é normalmente armazenada e concentrada entre as refeições?","o":["Vesícula biliar.","Jejuno.","Apêndice vermiforme.","Reto."],"a":0,"e":"A vesícula biliar armazena e concentra a bile produzida pelo fígado. Após uma refeição rica em gorduras, a colecistocinina estimula sua contração, liberando bile pelo sistema de ductos até o duodeno."},
+{"topic":"Absorção de nutrientes","q":"Em qual parte do sistema digestório ocorre a maior parte da absorção dos nutrientes?","o":["Esôfago.","Estômago.","Intestino delgado.","Reto."],"a":2,"e":"A maior parte da absorção dos nutrientes ocorre no intestino delgado, especialmente no jejuno, graças às pregas circulares, vilosidades e microvilosidades que aumentam a área de contato. O duodeno também absorve nutrientes; o íleo tem funções específicas, como a absorção de sais biliares e vitamina B12."},
+{"topic":"Secreção pancreática","q":"Qual é a principal função do bicarbonato presente no suco pancreático?","o":["Produzir o ácido do estômago.","Armazenar glicose no intestino.","Transformar as fezes em bile.","Neutralizar a acidez do quimo que chega ao duodeno."],"a":3,"e":"O pâncreas secreta bicarbonato, principalmente por suas células ductais. Ele ajuda a neutralizar o quimo ácido vindo do estômago, protegendo a mucosa duodenal e criando um pH mais adequado para a ação das enzimas digestivas pancreáticas."},
+{"topic":"Função do intestino grosso","q":"Qual é uma das principais funções do intestino grosso?","o":["Produzir pepsina.","Absorver água e eletrólitos e contribuir para a formação das fezes.","Secretar a maior parte das enzimas digestivas.","Produzir insulina."],"a":1,"e":"O intestino grosso absorve parte da água e dos eletrólitos que permanecem no conteúdo intestinal, compactando progressivamente as fezes. Também abriga a microbiota intestinal, que fermenta certos resíduos alimentares. O reto atua como local de armazenamento temporário das fezes antes da evacuação."}
 ];
+var originalQuestions=Q.slice();
+function shuffledCopy(items){
+  var arr=items.slice();
+  for(var i=arr.length-1;i>0;i--){
+    var j=Math.floor(Math.random()*(i+1)),tmp=arr[i];
+    arr[i]=arr[j];arr[j]=tmp;
+  }
+  return arr;
+}
+function mixQuestions(){
+  var advanced=shuffledCopy(originalQuestions.slice(0,5));
+  var basic=shuffledCopy(originalQuestions.slice(5));
+  var mixed=[];
+  for(var i=0;i<advanced.length;i++){
+    var group=shuffledCopy([basic[i*2],basic[i*2+1],advanced[i]]);
+    mixed.push.apply(mixed,group);
+  }
+  Q=mixed;
+}
 var $=function(id){return document.getElementById(id);};
 var canvas=$('canvas'),ctx=canvas.getContext('2d'),size=20,units=20;
 var vectors={up:{x:0,y:-1},down:{x:0,y:1},left:{x:-1,y:0},right:{x:1,y:0}};
 var snake=[],direction='right',nextDirection='right',directionSet=false,apple=null,score=0,index=0,phase='ready',clock=null;
 function stop(){if(clock!==null){clearInterval(clock);clock=null;}}
-function hud(){$('score').textContent=score+' / 5';$('length').textContent=String(snake.length);$('progressFill').style.width=(score*20)+'%';}
+function hud(){$('score').textContent=score+' / '+Q.length;$('length').textContent=String(snake.length);$('progressFill').style.width=(score/Q.length*100)+'%';}
 function setStatus(t){$('status').textContent=t;}
 function overlay(emoji,title,message,label,callback){
  $('ovIcon').textContent=emoji;$('ovTitle').textContent=title;$('ovText').textContent=message;
@@ -161,9 +190,9 @@ function draw(){
  });
 }
 function reset(){
- stop();snake=[{x:7,y:9},{x:6,y:9},{x:5,y:9}];direction='right';nextDirection='right';directionSet=false;apple={x:12,y:9};score=0;index=0;phase='ready';
+ stop();mixQuestions();snake=[{x:7,y:9},{x:6,y:9},{x:5,y:9}];direction='right';nextDirection='right';directionSet=false;apple={x:12,y:9};score=0;index=0;phase='ready';
  $('qBackdrop').hidden=true;$('pauseButton').textContent='Pausar';hud();setStatus('Pronto');draw();
- overlay('🐍🍎','Cobrinha Digestiva','Pegue as maçãs, responda corretamente e faça a cobrinha crescer. Cinco acertos para vencer!','▶ Jogar',start);
+ overlay('🐍🍎','Cobrinha Digestiva','Pegue as maçãs, responda corretamente e faça a cobrinha crescer. Acerte as 15 perguntas para vencer!','▶ Jogar',start);
 }
 function start(){
  if(phase!=='ready'&&phase!=='paused')return;
@@ -176,7 +205,7 @@ function pause(){
 }
 function gameOver(){
  stop();phase='over';setStatus('Fim');
- overlay('💀','Fim de jogo','Você bateu! Acertou '+score+' de 5 perguntas.','↻ Jogar novamente',reset);
+ overlay('💀','Fim de jogo','Você bateu! Acertou '+score+' de '+Q.length+' perguntas.','↻ Jogar novamente',reset);
 }
 function tick(){
  if(phase!=='running')return;
@@ -196,7 +225,7 @@ function change(d){
 }
 function ask(){
  var q=Q[index];if(!q)return;
- $('qCount').textContent='PERGUNTA '+(index+1)+' DE 5';$('qTopic').textContent=q.topic;$('question').textContent=q.q;
+ $('qCount').textContent='PERGUNTA '+(index+1)+' DE '+Q.length;$('qTopic').textContent=q.topic;$('question').textContent=q.q;
  var list=$('options');list.replaceChildren();
  q.o.forEach(function(option,i){
    var btn=document.createElement('button');btn.type='button';btn.className='option';
@@ -210,21 +239,21 @@ function answer(chosen){
  if(phase!=='asking')return;
  var q=Q[index],ok=chosen===q.a;phase='reviewing';
  Array.from($('options').children).forEach(function(btn,i){btn.disabled=true;if(i===q.a)btn.classList.add('correct');else if(i===chosen)btn.classList.add('wrong');});
- if(ok){score++;index++;setStatus(score===5?'Vitória':'Acertou');}else{setStatus('Errou');}
+ if(ok){score++;index++;setStatus(score===Q.length?'Vitória':'Acertou');}else{setStatus('Errou');}
  hud();
  $('feedback').hidden=false;$('feedback').className='feedback'+(ok?'':' error');
  $('feedbackHeading').textContent=ok?'✅ Resposta correta!':'❌ Resposta incorreta!';
  $('feedbackBody').textContent=q.e;
- var next=$('continueButton');next.hidden=false;next.textContent=ok?(score===5?'🏆 Ver vitória':'▶ Continuar jogando'):'↻ Tentar novamente';
+ var next=$('continueButton');next.hidden=false;next.textContent=ok?(score===Q.length?'🏆 Ver vitória':'▶ Continuar jogando'):'↻ Tentar novamente';
  next.onclick=function(){
    $('qBackdrop').hidden=true;
    if(!ok){gameOverAnswer();return;}
-   if(score===5){stop();phase='won';setStatus('Vitória');draw();overlay('🏆','Você venceu!','Parabéns! Você acertou as cinco questões avançadas.','↻ Jogar novamente',reset);}
+   if(score===Q.length){stop();phase='won';setStatus('Vitória');draw();overlay('🏆','Você venceu!','Parabéns! Você acertou as 15 perguntas de anatomia e fisiologia digestiva.','↻ Jogar novamente',reset);}
    else{putApple();draw();phase='paused';start();}
  };
 }
 function gameOverAnswer(){
- stop();phase='over';overlay('💀','Fim de jogo','Resposta incorreta. Você acertou '+score+' de 5 perguntas.','↻ Tentar novamente',reset);
+ stop();phase='over';overlay('💀','Fim de jogo','Resposta incorreta. Você acertou '+score+' de '+Q.length+' perguntas.','↻ Tentar novamente',reset);
 }
 document.querySelectorAll('[data-dir]').forEach(function(btn){btn.addEventListener('click',function(){change(btn.dataset.dir);});});
 $('pauseButton').addEventListener('click',pause);
