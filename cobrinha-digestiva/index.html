@@ -37,7 +37,7 @@
     .actions{display:flex;gap:7px;flex-shrink:0}
     .secondary{background:#fff;border:1px solid #b9d7c6;border-radius:10px;padding:10px 11px;color:#26674c;font-weight:780;font-size:12px}
     .controls{display:grid;grid-template-columns:repeat(3,66px);grid-template-rows:repeat(2,54px);justify-content:center;gap:6px;margin-top:13px;user-select:none}
-    .dir{border:1px solid #b7d9c5;border-bottom:3px solid #8bbb9d;background:#fff;color:#227950;border-radius:13px;font-size:26px;font-weight:850;touch-action:manipulation}
+    .dir{border:1px solid #b7d9c5;border-bottom:3px solid #8bbb9d;background:#fff;color:#227950;border-radius:13px;font-size:26px;font-weight:850;touch-action:manipulation}.dir.selected{background:#d0f4dc;border-color:#20865c;box-shadow:inset 0 0 0 1px #20865c}
     .up{grid-column:2;grid-row:1}.left{grid-column:1;grid-row:2}.down{grid-column:2;grid-row:2}.right{grid-column:3;grid-row:2}
     .questionBackdrop{position:fixed;inset:0;z-index:50;background:rgba(11,43,35,.89);display:flex;align-items:center;justify-content:center;padding:14px;overflow-y:auto}
     .questionBox{background:#fff;border-radius:19px;padding:20px;width:min(100%,530px);max-height:calc(100dvh - 28px);overflow-y:auto;box-shadow:0 18px 60px #08291b5e}
@@ -86,7 +86,7 @@
   </div>
   <div class="progress"><div class="progressFill" id="progressFill"></div></div>
   <div class="bar">
-    <p class="hint">Use as setas, deslize o dedo no tabuleiro<br>ou toque nos controles.</p>
+    <p class="hint" id="hintText">Use as setas, deslize o dedo no tabuleiro<br>ou toque nos controles.</p>
     <div class="actions">
       <button class="secondary" id="pauseButton" type="button">Pausar</button>
       <button class="secondary" id="resetButton" type="button">↻ Reiniciar</button>
@@ -164,13 +164,20 @@ function overlay(emoji,title,message,label,callback){
 function hideOverlay(){$('boardOverlay').hidden=true;}
 function taken(p){return snake.some(function(s){return s.x===p.x&&s.y===p.y;});}
 function putApple(){
- var head=snake[0],v=vectors[direction];
- for(var distance=4;distance>=2;distance--){
-   var a={x:head.x+v.x*distance,y:head.y+v.y*distance};
-   if(a.x>=0&&a.x<units&&a.y>=0&&a.y<units&&!taken(a)){apple=a;return;}
+ // A maçã fica no quadrado central, nunca perto das paredes.
+ // Evitamos a mesma linha e a mesma coluna da cabeça para exigir que o jogador faça curvas.
+ var head=snake[0],possible=[];
+ for(var y=5;y<=14;y++)for(var x=5;x<=14;x++){
+   var p={x:x,y:y},distance=Math.abs(x-head.x)+Math.abs(y-head.y);
+   if(taken(p)||x===head.x||y===head.y||distance<5||distance>14)continue;
+   possible.push(p);
  }
- var possible=[];
- for(var y=0;y<units;y++)for(var x=0;x<units;x++)if(!taken({x:x,y:y}))possible.push({x:x,y:y});
+ if(!possible.length){
+   for(var y2=4;y2<=15;y2++)for(var x2=4;x2<=15;x2++){
+     var fallback={x:x2,y:y2};
+     if(!taken(fallback))possible.push(fallback);
+   }
+ }
  apple=possible.length?possible[Math.floor(Math.random()*possible.length)]:null;
 }
 function cell(x,y,color,rad){
@@ -190,14 +197,17 @@ function draw(){
  });
 }
 function reset(){
- stop();mixQuestions();snake=[{x:7,y:9},{x:6,y:9},{x:5,y:9}];direction='right';nextDirection='right';directionSet=false;apple={x:12,y:9};score=0;index=0;phase='ready';
+ stop();mixQuestions();snake=[{x:7,y:9},{x:6,y:9},{x:5,y:9}];direction='right';nextDirection='right';directionSet=false;score=0;index=0;phase='ready';
+ putApple();showDirection();
  $('qBackdrop').hidden=true;$('pauseButton').textContent='Pausar';hud();setStatus('Pronto');draw();
- overlay('🐍🍎','Cobrinha Digestiva','Pegue as maçãs, responda corretamente e faça a cobrinha crescer. Acerte as 15 perguntas para vencer!','▶ Jogar',start);
+ $('hintText').textContent='Use as setas, deslize no tabuleiro ou toque nos controles.';
+ overlay('🐍🍎','Cobrinha Digestiva','Guie a cobrinha até as maçãs no centro do tabuleiro. Escolha o caminho e acerte as 15 perguntas!','▶ Jogar',start);
 }
 function start(){
  if(phase!=='ready'&&phase!=='paused')return;
- phase='running';setStatus('Jogando');hideOverlay();$('pauseButton').textContent='Pausar';stop();
- clock=setInterval(tick,205);
+ phase='running';setStatus('Jogando');hideOverlay();$('pauseButton').textContent='Pausar';
+ $('hintText').textContent='Guie a cobrinha: use as setas ou deslize no tabuleiro.';
+ stop();clock=setInterval(tick,270);
 }
 function pause(){
  if(phase==='running'){stop();phase='paused';setStatus('Pausado');$('pauseButton').textContent='Retomar';overlay('⏸️','Pausado','A partida está pausada.','▶ Continuar',start);}
@@ -209,7 +219,7 @@ function gameOver(){
 }
 function tick(){
  if(phase!=='running')return;
- direction=nextDirection;directionSet=false;
+ direction=nextDirection;directionSet=false;showDirection();
  var v=vectors[direction],head=snake[0],p={x:head.x+v.x,y:head.y+v.y};
  var eating=apple&&p.x===apple.x&&p.y===apple.y;
  var segments=eating?snake:snake.slice(0,-1);
@@ -218,10 +228,20 @@ function tick(){
  if(eating){stop();phase='asking';apple=null;setStatus('Pergunta');hud();draw();ask();}
  else{snake.pop();draw();}
 }
+function showDirection(){
+ document.querySelectorAll('[data-dir]').forEach(function(btn){
+   btn.classList.toggle('selected',btn.dataset.dir===nextDirection);
+ });
+}
 function change(d){
- if(phase!=='running'||!vectors[d]||directionSet)return;
- var v=vectors[direction],n=vectors[d];if(v.x+n.x===0&&v.y+n.y===0)return;
- nextDirection=d;directionSet=true;
+ // O jogador também pode escolher a direção enquanto a partida está pausada.
+ if((phase!=='running'&&phase!=='paused'&&phase!=='ready')||!vectors[d])return;
+ if(phase==='running'&&directionSet)return;
+ var v=vectors[direction],n=vectors[d];
+ if(v.x+n.x===0&&v.y+n.y===0)return;
+ nextDirection=d;
+ if(phase==='running')directionSet=true;
+ showDirection();
 }
 function ask(){
  var q=Q[index];if(!q)return;
@@ -249,7 +269,12 @@ function answer(chosen){
    $('qBackdrop').hidden=true;
    if(!ok){gameOverAnswer();return;}
    if(score===Q.length){stop();phase='won';setStatus('Vitória');draw();overlay('🏆','Você venceu!','Parabéns! Você acertou as 15 perguntas de anatomia e fisiologia digestiva.','↻ Jogar novamente',reset);}
-   else{putApple();draw();phase='paused';start();}
+   else{
+     // Após acertar, o jogo aguarda a decisão do jogador; não anda sozinho.
+     putApple();draw();phase='paused';setStatus('Pronto');
+     $('pauseButton').textContent='▶ Continuar';
+     $('hintText').textContent='Nova maçã no centro! Escolha a direção e toque em Continuar.';
+   }
  };
 }
 function gameOverAnswer(){
