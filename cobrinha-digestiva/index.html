@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#103f34">
+  <meta name="description" content="Jogo da cobrinha sobre anatomia e fisiologia do sistema digestório.">
+  <title>Cobrinha Digestiva</title>
+  <style>
+    :root{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#153f34;background:#e9f4ec}
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100dvh;background:radial-gradient(ellipse at 50% 0%,#f5fff0 0%,#e6f5ec 55%,#d8eee4 100%);padding:16px 12px 30px}
+    button{font-family:inherit;cursor:pointer;touch-action:manipulation}
+    .app{max-width:520px;margin:auto}
+    header{display:flex;gap:10px;align-items:center;margin:6px 0 16px}
+    .brand{display:grid;place-items:center;background:#176847;border-radius:15px;width:52px;height:52px;font-size:27px;box-shadow:0 4px 0 #9ac8ab}
+    h1{font-size:clamp(23px,6vw,29px);line-height:1.1;margin:0;font-weight:900;letter-spacing:-.8px}
+    .sub{font-size:11px;font-weight:750;letter-spacing:1.3px;color:#6d8c7b;margin-top:5px}
+    .pill{margin-left:auto;white-space:nowrap;background:#fff;border:1px solid #cde6d6;border-radius:30px;color:#227b56;font-size:11px;font-weight:800;padding:8px 10px}
+    .stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:14px}
+    .stat{background:#fff;border:1px solid #cce4d6;border-radius:14px;text-align:center;padding:10px 3px;box-shadow:0 2px 0 #cee2d5}
+    .stat b{display:block;font-size:20px;line-height:1.3;color:#165b43;font-variant-numeric:tabular-nums}
+    .stat small{display:block;font-size:10px;text-transform:uppercase;font-weight:800;color:#769087;letter-spacing:.65px}
+    .board{width:100%;max-width:480px;aspect-ratio:1;margin:auto;border:5px solid #246b4e;background:#cce7d0;position:relative;border-radius:15px;overflow:hidden;box-shadow:0 6px 0 #a4cbbb}
+    canvas{display:block;width:100%;height:100%;touch-action:none}
+    .boardOverlay{position:absolute;inset:0;z-index:3;background:rgba(9,47,35,.84);display:grid;place-items:center;color:#fff;text-align:center;padding:20px}
+    .ovContent{max-width:310px}
+    .ovIcon{font-size:48px}
+    .ovTitle{font-size:26px;font-weight:900;line-height:1.15;margin:11px 0 8px}
+    .ovText{color:#dbf1e4;line-height:1.5;font-size:14px;margin:0 0 18px}
+    .primary{display:block;width:100%;background:#defa78;color:#214d36;border:0;border-radius:12px;font-size:15px;font-weight:850;padding:13px 17px;min-height:47px}
+    .primary:active,.dir:active{transform:translateY(1px)}
+    .progress{height:7px;overflow:hidden;background:#c4dfcd;border-radius:10px;margin:16px 0 12px}
+    .progressFill{height:100%;width:0;background:#209e6c;transition:width .25s}
+    .bar{display:flex;justify-content:space-between;align-items:center;gap:10px}
+    .hint{color:#638273;font-size:12px;line-height:1.45;margin:0}
+    .actions{display:flex;gap:7px;flex-shrink:0}
+    .secondary{background:#fff;border:1px solid #b9d7c6;border-radius:10px;padding:10px 11px;color:#26674c;font-weight:780;font-size:12px}
+    .controls{display:grid;grid-template-columns:repeat(3,66px);grid-template-rows:repeat(2,54px);justify-content:center;gap:6px;margin-top:13px;user-select:none}
+    .dir{border:1px solid #b7d9c5;border-bottom:3px solid #8bbb9d;background:#fff;color:#227950;border-radius:13px;font-size:26px;font-weight:850;touch-action:manipulation}
+    .up{grid-column:2;grid-row:1}.left{grid-column:1;grid-row:2}.down{grid-column:2;grid-row:2}.right{grid-column:3;grid-row:2}
+    .questionBackdrop{position:fixed;inset:0;z-index:50;background:rgba(11,43,35,.89);display:flex;align-items:center;justify-content:center;padding:14px;overflow-y:auto}
+    .questionBox{background:#fff;border-radius:19px;padding:20px;width:min(100%,530px);max-height:calc(100dvh - 28px);overflow-y:auto;box-shadow:0 18px 60px #08291b5e}
+    .qMeta{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px}
+    .qCount{font-size:12px;font-weight:850;color:#198b62}
+    .topic{background:#e8f6ed;color:#397557;font-weight:750;font-size:11px;padding:6px 9px;border-radius:8px;text-align:right}
+    h2{font-size:21px;line-height:1.3;margin:0 0 17px;font-weight:850;letter-spacing:-.45px}
+    .options{display:grid;gap:9px}
+    .option{width:100%;text-align:left;display:flex;gap:10px;align-items:flex-start;background:#f7faf8;border:1px solid #dbe8df;color:#28483b;border-radius:11px;padding:12px;font-size:13px;line-height:1.45}
+    .option .letter{background:#e3f0e8;color:#2d7354;border-radius:7px;display:grid;place-items:center;width:26px;height:26px;flex:0 0 26px;font-size:12px;font-weight:900}
+    .option:not(:disabled):active{background:#e8f4e9}
+    .option.correct{background:#dff6e7;border-color:#3caa6f}
+    .option.wrong{background:#fff0ee;border-color:#e9877b}
+    .option:disabled{opacity:1;cursor:default}
+    .feedback{background:#f0f9f1;border:1px solid #cce7d1;border-radius:11px;padding:13px;margin-top:14px}
+    .feedback.error{background:#fff0ee;border-color:#f4d2cb}
+    .feedback strong{display:block;margin-bottom:7px;font-size:15px}
+    .feedback p{font-size:13px;color:#425b4d;line-height:1.6;margin:0}
+    .continue{margin-top:13px;background:#197953;color:#fff}
+    [hidden]{display:none!important}
+    @media(max-width:400px){body{padding:10px 9px 22px}.brand{width:43px;height:43px;font-size:24px}.pill{padding:6px 7px;font-size:10px}.stats{gap:6px}.stat{padding:7px 2px}.stat b{font-size:18px}.questionBox{padding:15px}h2{font-size:18px}.option{padding:10px;font-size:12px}.controls{grid-template-columns:repeat(3,62px);grid-template-rows:repeat(2,51px)}}
+  </style>
+</head>
+<body>
+<main class="app">
+  <header>
+    <div class="brand" aria-hidden="true">🐍</div>
+    <div><h1>Cobrinha Digestiva</h1><div class="sub">ANATOMIA & FISIOLOGIA</div></div>
+    <div class="pill">🎓 AVANÇADO</div>
+  </header>
+  <section class="stats" aria-label="Pontuação">
+    <div class="stat"><b id="score">0 / 5</b><small>🍎 Acertos</small></div>
+    <div class="stat"><b id="length">3</b><small>🐍 Tamanho</small></div>
+    <div class="stat"><b id="status" style="font-size:15px;margin-top:4px">Pronto</b><small>Estado</small></div>
+  </section>
+  <div class="board" id="board">
+    <canvas id="canvas" width="400" height="400" aria-label="Tabuleiro do jogo da cobrinha"></canvas>
+    <div class="boardOverlay" id="boardOverlay">
+      <div class="ovContent">
+        <div class="ovIcon" id="ovIcon">🐍🍎</div>
+        <div class="ovTitle" id="ovTitle">Cobrinha Digestiva</div>
+        <p class="ovText" id="ovText">Pegue as maçãs, responda corretamente e faça a cobrinha crescer. Cinco acertos para vencer!</p>
+        <button class="primary" id="ovButton" type="button">▶ Jogar</button>
+      </div>
+    </div>
+  </div>
+  <div class="progress"><div class="progressFill" id="progressFill"></div></div>
+  <div class="bar">
+    <p class="hint">Use as setas, deslize o dedo no tabuleiro<br>ou toque nos controles.</p>
+    <div class="actions">
+      <button class="secondary" id="pauseButton" type="button">Pausar</button>
+      <button class="secondary" id="resetButton" type="button">↻ Reiniciar</button>
+    </div>
+  </div>
+  <nav class="controls" aria-label="Direções">
+    <button class="dir up" data-dir="up" aria-label="Cima" type="button">↑</button>
+    <button class="dir left" data-dir="left" aria-label="Esquerda" type="button">←</button>
+    <button class="dir down" data-dir="down" aria-label="Baixo" type="button">↓</button>
+    <button class="dir right" data-dir="right" aria-label="Direita" type="button">→</button>
+  </nav>
+</main>
+<div class="questionBackdrop" id="qBackdrop" hidden>
+  <section class="questionBox" role="dialog" aria-modal="true" aria-labelledby="question">
+    <div class="qMeta"><span class="qCount" id="qCount"></span><span class="topic" id="qTopic"></span></div>
+    <h2 id="question"></h2>
+    <div class="options" id="options"></div>
+    <div class="feedback" id="feedback" hidden>
+      <strong id="feedbackHeading"></strong>
+      <p id="feedbackBody"></p>
+    </div>
+    <button id="continueButton" class="primary continue" type="button" hidden>Continuar →</button>
+  </section>
+</div>
+<script>
+(function(){
+'use strict';
+var Q=[
+ {topic:'Motilidade intestinal',q:'Qual mecanismo do sistema nervoso entérico permite a progressão do bolo alimentar durante o reflexo peristáltico?',o:['Contração simultânea de toda a musculatura intestinal.','Contração proximal ao bolo e relaxamento distal, mediados pelo plexo mioentérico.','Relaxamento proximal e contração distal, mediados pelo plexo submucoso.','Controle exclusivo pelo sistema nervoso simpático.'],a:1,e:'A distensão intestinal ativa circuitos do plexo mioentérico de Auerbach. Neurônios excitatórios liberam acetilcolina e substância P, promovendo contração atrás do bolo alimentar. À frente dele, neurônios inibitórios liberam óxido nítrico e VIP, causando relaxamento. Esse mecanismo coordenado conduz o conteúdo no sentido aboral.'},
+ {topic:'Regulação hormonal',q:'Após uma refeição rica em lipídios, qual hormônio estimula a contração da vesícula biliar e a secreção de enzimas pancreáticas?',o:['Gastrina.','Secretina.','Colecistocinina (CCK).','Somatostatina.'],a:2,e:'A colecistocinina é secretada pelas células I do duodeno e jejuno em resposta principalmente a ácidos graxos e produtos da digestão proteica. Ela contrai a vesícula biliar, favorece o relaxamento do esfíncter de Oddi, aumenta a secreção de enzimas pancreáticas e retarda o esvaziamento gástrico. A secretina, diferentemente, estimula principalmente a secreção pancreática de bicarbonato.'},
+ {topic:'Absorção intestinal',q:'Um paciente submetido à ressecção extensa do íleo terminal desenvolve esteatorreia. Qual mecanismo explica principalmente essa alteração?',o:['Redução da absorção de ferro no cólon.','Prejuízo da reabsorção dos sais biliares e da circulação entero-hepática.','Diminuição da produção de ácido clorídrico no estômago.','Bloqueio da liberação de amilase pelas glândulas salivares.'],a:1,e:'O íleo terminal reabsorve ativamente grande parte dos sais biliares, sobretudo por meio do transportador ASBT. Uma ressecção extensa diminui o reservatório desses sais e prejudica a formação de micelas necessárias à absorção de lipídios. Isso pode causar esteatorreia e deficiência das vitaminas A, D, E e K. A mesma região também absorve a vitamina B12 ligada ao fator intrínseco.'},
+ {topic:'Anatomia hepatopancreática',q:'Em sua configuração anatômica habitual, a ampola hepatopancreática (de Vater) resulta da união de quais estruturas e desemboca onde?',o:['Ducto cístico e ducto hepático direito, no jejuno.','Ducto pancreático acessório e ducto cístico, na papila duodenal menor.','Ducto hepático comum e ducto pancreático acessório, no bulbo duodenal.','Ducto colédoco e ducto pancreático principal, na papila duodenal maior.'],a:3,e:'O ducto colédoco conduz a bile e normalmente se une ao ducto pancreático principal (de Wirsung), formando a ampola hepatopancreática. Ela desemboca na papila duodenal maior, na segunda porção do duodeno. O esfíncter de Oddi regula a passagem dessas secreções. Um cálculo impactado nessa região pode causar obstrução biliar e pancreatite aguda.'},
+ {topic:'Secreção gástrica',q:'Durante a secreção de ácido clorídrico pelas células parietais gástricas, qual processo provoca a chamada maré alcalina pós-prandial?',o:['Transporte de bicarbonato para o sangue pela membrana basolateral da célula parietal.','Liberação de bicarbonato diretamente no lúmen gástrico.','Inibição da anidrase carbônica nas células parietais.','Absorção direta de íons H⁺ do estômago para a circulação.'],a:0,e:'A anidrase carbônica catalisa a formação de ácido carbônico a partir de CO₂ e água, produzindo H⁺ e HCO₃⁻. O H⁺ é transportado para o lúmen gástrico pela bomba H⁺/K⁺-ATPase da membrana apical. Simultaneamente, o bicarbonato passa ao sangue através do trocador basolateral Cl⁻/HCO₃⁻, elevando temporariamente o bicarbonato circulante: a maré alcalina pós-prandial.'}
+];
+var $=function(id){return document.getElementById(id);};
+var canvas=$('canvas'),ctx=canvas.getContext('2d'),size=20,units=20;
+var vectors={up:{x:0,y:-1},down:{x:0,y:1},left:{x:-1,y:0},right:{x:1,y:0}};
+var snake=[],direction='right',nextDirection='right',directionSet=false,apple=null,score=0,index=0,phase='ready',clock=null;
+function stop(){if(clock!==null){clearInterval(clock);clock=null;}}
+function hud(){$('score').textContent=score+' / 5';$('length').textContent=String(snake.length);$('progressFill').style.width=(score*20)+'%';}
+function setStatus(t){$('status').textContent=t;}
+function overlay(emoji,title,message,label,callback){
+ $('ovIcon').textContent=emoji;$('ovTitle').textContent=title;$('ovText').textContent=message;
+ $('ovButton').textContent=label;$('ovButton').onclick=callback;$('boardOverlay').hidden=false;
+}
+function hideOverlay(){$('boardOverlay').hidden=true;}
+function taken(p){return snake.some(function(s){return s.x===p.x&&s.y===p.y;});}
+function putApple(){
+ var head=snake[0],v=vectors[direction];
+ for(var distance=4;distance>=2;distance--){
+   var a={x:head.x+v.x*distance,y:head.y+v.y*distance};
+   if(a.x>=0&&a.x<units&&a.y>=0&&a.y<units&&!taken(a)){apple=a;return;}
+ }
+ var possible=[];
+ for(var y=0;y<units;y++)for(var x=0;x<units;x++)if(!taken({x:x,y:y}))possible.push({x:x,y:y});
+ apple=possible.length?possible[Math.floor(Math.random()*possible.length)]:null;
+}
+function cell(x,y,color,rad){
+ var p=1.1,w=size-2.2,r=rad||4;
+ ctx.beginPath();ctx.roundRect(x*size+p,y*size+p,w,w,r);ctx.fillStyle=color;ctx.fill();
+}
+function draw(){
+ ctx.fillStyle='#dcf0df';ctx.fillRect(0,0,400,400);
+ for(var y=0;y<units;y++)for(var x=0;x<units;x++)if((x+y)%2===0){ctx.fillStyle='#d1e8d5';ctx.fillRect(x*size,y*size,size,size);}
+ if(apple){ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='20px system-ui,Apple Color Emoji,Segoe UI Emoji';ctx.fillText('🍎',apple.x*size+10,apple.y*size+11);}
+ snake.forEach(function(p,i){cell(p.x,p.y,i===0?'#146442':i%2?'#43a86d':'#53c384',i===0?6:4);});
+ var head=snake[0];if(!head)return;
+ var pos=direction==='right'?[[13,5],[13,14]]:direction==='left'?[[6,5],[6,14]]:direction==='up'?[[5,6],[14,6]]:[[5,13],[14,13]];
+ pos.forEach(function(p){
+   ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(head.x*size+p[0],head.y*size+p[1],3.1,0,Math.PI*2);ctx.fill();
+   ctx.fillStyle='#153a2b';ctx.beginPath();ctx.arc(head.x*size+p[0]+(direction==='right'?1:direction==='left'?-1:0),head.y*size+p[1]+(direction==='down'?1:direction==='up'?-1:0),1.5,0,Math.PI*2);ctx.fill();
+ });
+}
+function reset(){
+ stop();snake=[{x:7,y:9},{x:6,y:9},{x:5,y:9}];direction='right';nextDirection='right';directionSet=false;apple={x:12,y:9};score=0;index=0;phase='ready';
+ $('qBackdrop').hidden=true;$('pauseButton').textContent='Pausar';hud();setStatus('Pronto');draw();
+ overlay('🐍🍎','Cobrinha Digestiva','Pegue as maçãs, responda corretamente e faça a cobrinha crescer. Cinco acertos para vencer!','▶ Jogar',start);
+}
+function start(){
+ if(phase!=='ready'&&phase!=='paused')return;
+ phase='running';setStatus('Jogando');hideOverlay();$('pauseButton').textContent='Pausar';stop();
+ clock=setInterval(tick,205);
+}
+function pause(){
+ if(phase==='running'){stop();phase='paused';setStatus('Pausado');$('pauseButton').textContent='Retomar';overlay('⏸️','Pausado','A partida está pausada.','▶ Continuar',start);}
+ else if(phase==='paused')start();
+}
+function gameOver(){
+ stop();phase='over';setStatus('Fim');
+ overlay('💀','Fim de jogo','Você bateu! Acertou '+score+' de 5 perguntas.','↻ Jogar novamente',reset);
+}
+function tick(){
+ if(phase!=='running')return;
+ direction=nextDirection;directionSet=false;
+ var v=vectors[direction],head=snake[0],p={x:head.x+v.x,y:head.y+v.y};
+ var eating=apple&&p.x===apple.x&&p.y===apple.y;
+ var segments=eating?snake:snake.slice(0,-1);
+ if(p.x<0||p.x>=units||p.y<0||p.y>=units||segments.some(function(s){return s.x===p.x&&s.y===p.y;})){gameOver();return;}
+ snake.unshift(p);
+ if(eating){stop();phase='asking';apple=null;setStatus('Pergunta');hud();draw();ask();}
+ else{snake.pop();draw();}
+}
+function change(d){
+ if(phase!=='running'||!vectors[d]||directionSet)return;
+ var v=vectors[direction],n=vectors[d];if(v.x+n.x===0&&v.y+n.y===0)return;
+ nextDirection=d;directionSet=true;
+}
+function ask(){
+ var q=Q[index];if(!q)return;
+ $('qCount').textContent='PERGUNTA '+(index+1)+' DE 5';$('qTopic').textContent=q.topic;$('question').textContent=q.q;
+ var list=$('options');list.replaceChildren();
+ q.o.forEach(function(option,i){
+   var btn=document.createElement('button');btn.type='button';btn.className='option';
+   var label=document.createElement('span');label.className='letter';label.textContent='ABCD'[i];
+   var txt=document.createElement('span');txt.textContent=option;
+   btn.append(label,txt);btn.addEventListener('click',function(){answer(i);});list.appendChild(btn);
+ });
+ $('feedback').hidden=true;$('feedback').className='feedback';$('continueButton').hidden=true;$('qBackdrop').hidden=false;
+}
+function answer(chosen){
+ if(phase!=='asking')return;
+ var q=Q[index],ok=chosen===q.a;phase='reviewing';
+ Array.from($('options').children).forEach(function(btn,i){btn.disabled=true;if(i===q.a)btn.classList.add('correct');else if(i===chosen)btn.classList.add('wrong');});
+ if(ok){score++;index++;setStatus(score===5?'Vitória':'Acertou');}else{setStatus('Errou');}
+ hud();
+ $('feedback').hidden=false;$('feedback').className='feedback'+(ok?'':' error');
+ $('feedbackHeading').textContent=ok?'✅ Resposta correta!':'❌ Resposta incorreta!';
+ $('feedbackBody').textContent=q.e;
+ var next=$('continueButton');next.hidden=false;next.textContent=ok?(score===5?'🏆 Ver vitória':'▶ Continuar jogando'):'↻ Tentar novamente';
+ next.onclick=function(){
+   $('qBackdrop').hidden=true;
+   if(!ok){gameOverAnswer();return;}
+   if(score===5){stop();phase='won';setStatus('Vitória');draw();overlay('🏆','Você venceu!','Parabéns! Você acertou as cinco questões avançadas.','↻ Jogar novamente',reset);}
+   else{putApple();draw();phase='paused';start();}
+ };
+}
+function gameOverAnswer(){
+ stop();phase='over';overlay('💀','Fim de jogo','Resposta incorreta. Você acertou '+score+' de 5 perguntas.','↻ Tentar novamente',reset);
+}
+document.querySelectorAll('[data-dir]').forEach(function(btn){btn.addEventListener('click',function(){change(btn.dataset.dir);});});
+$('pauseButton').addEventListener('click',pause);
+$('resetButton').addEventListener('click',reset);
+document.addEventListener('keydown',function(e){
+ var k={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',w:'up',s:'down',a:'left',d:'right',W:'up',S:'down',A:'left',D:'right'};
+ if(k[e.key]&&(phase==='running'||phase==='paused')){e.preventDefault();change(k[e.key]);}
+ if(e.code==='Space'&&(phase==='running'||phase==='paused'||phase==='ready')){e.preventDefault();if(phase==='ready')start();else pause();}
+});
+var sx=0,sy=0,active=false;
+$('board').addEventListener('touchstart',function(e){if(e.touches.length!==1)return;sx=e.touches[0].clientX;sy=e.touches[0].clientY;active=true;},{passive:true});
+$('board').addEventListener('touchend',function(e){
+ if(!active||!e.changedTouches.length)return;var dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;active=false;
+ if(Math.max(Math.abs(dx),Math.abs(dy))>18)change(Math.abs(dx)>Math.abs(dy)?(dx>0?'right':'left'):(dy>0?'down':'up'));
+},{passive:true});
+document.addEventListener('visibilitychange',function(){if(document.hidden&&phase==='running')pause();});
+reset();
+})();
+</script>
+</body>
+</html>
